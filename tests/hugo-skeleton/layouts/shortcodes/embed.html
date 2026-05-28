@@ -1,0 +1,4 @@
+{{- $url := .Get "url" -}}
+<div class="embed-block">
+  {{- if .Inner }}{{ .Inner | safeHTML }}{{ else }}<a href="{{ $url }}">{{ $url }}</a>{{ end }}
+</div>

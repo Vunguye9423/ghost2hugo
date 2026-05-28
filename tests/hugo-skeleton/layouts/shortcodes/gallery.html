@@ -1,0 +1,2 @@
+{{- $cols := .Get "cols" | default "3" -}}
+<div class="gallery cols-{{ $cols }}">{{ .Inner }}</div>

@@ -1,0 +1,7 @@
+{{- $src := .Get "src" -}}
+{{- $name := .Get "name" -}}
+{{- $size := .Get "size" -}}
+<a class="attachment-card" href="{{ $src }}" download>
+  <span class="attachment-name">{{ $name }}</span>
+  {{- with $size }}<span class="attachment-size">{{ . }}</span>{{ end }}
+</a>

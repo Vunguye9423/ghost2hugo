@@ -1,0 +1,10 @@
+{{- $src := .Get "src" -}}
+{{- $mime := .Get "mime" | default "video/mp4" -}}
+{{- $title := .Get "title" -}}
+{{- $poster := .Get "poster" -}}
+<figure class="video-block">
+  {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end }}
+  <video controls preload="none"{{ with $poster }} poster="{{ . }}"{{ end }}>
+    <source src="{{ $src }}" type="{{ $mime }}">
+  </video>
+</figure>

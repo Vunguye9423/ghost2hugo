@@ -1,0 +1,32 @@
+# Test config — used by the e2e test. Asset URLs in the fixture point at
+# blog.example.com paths; we serve them locally with --local-assets.
+
+ghost:
+  export_file: ./tests/fixtures/ghost-export.json
+  base_url: https://blog.example.com
+
+hugo:
+  content_dir: ./tests/out/content/posts
+  permalink_pattern: /:slug/
+
+r2:
+  endpoint_url: https://example.r2.cloudflarestorage.com
+  access_key_id: test
+  secret_access_key: test
+  bucket: test-bucket
+  public_base_url: https://cdn.example.com
+  prefix: blog/
+
+assets:
+  rehost_external: true
+  max_retries: 1
+  timeout: 5
+  cache_control: "public, max-age=31536000, immutable"
+
+pipeline:
+  workers: 4
+  strict: true
+  overwrite: true
+
+logging:
+  level: INFO

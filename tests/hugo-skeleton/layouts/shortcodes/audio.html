@@ -1,0 +1,7 @@
+{{- $src := .Get "src" -}}
+{{- $mime := .Get "mime" | default "audio/mpeg" -}}
+{{- $title := .Get "title" -}}
+<figure class="audio-block">
+  {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end }}
+  <audio controls preload="none"><source src="{{ $src }}" type="{{ $mime }}"></audio>
+</figure>

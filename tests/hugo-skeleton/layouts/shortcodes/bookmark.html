@@ -1,0 +1,11 @@
+{{- $url := .Get "url" -}}
+{{- $title := .Get "title" -}}
+{{- $desc := .Get "desc" -}}
+{{- $thumb := .Get "thumbnail" -}}
+<a class="bookmark" href="{{ $url }}">
+  {{- with $thumb }}<img class="bookmark-thumb" src="{{ . }}" alt="">{{ end }}
+  <div class="bookmark-meta">
+    <strong class="bookmark-title">{{ $title }}</strong>
+    {{- with $desc }}<p class="bookmark-desc">{{ . }}</p>{{ end }}
+  </div>
+</a>

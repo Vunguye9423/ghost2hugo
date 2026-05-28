@@ -1,0 +1,6 @@
+{{- $type := .Get "type" | default "info" -}}
+{{- $emoji := .Get "emoji" -}}
+<div class="callout callout-{{ $type }}">
+{{- with $emoji }}<span class="callout-emoji">{{ . }}</span>{{ end }}
+<div class="callout-body">{{ .Inner | markdownify }}</div>
+</div>

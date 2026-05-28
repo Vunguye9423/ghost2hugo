@@ -1,0 +1,14 @@
+# Slugs to skip during migration. One slug per line; lines starting with # are comments.
+#
+# Copy this file to exclude.txt (gitignored), edit it, then point the migrator at it:
+#   ghost-to-hugo --exclude-file exclude.txt
+#
+# Handy for leaving behind posts you don't want to carry over to the new site.
+
+# Example — old affiliate / listicle posts:
+# top-10-gaming-keyboards-2023
+# best-budget-ssd-roundup-2022
+
+# Example — outdated or low-quality posts:
+# my-first-test-post
+# duplicate-draft

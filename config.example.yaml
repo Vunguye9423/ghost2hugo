@@ -1,0 +1,52 @@
+# ghost-to-hugo config.
+# Copy this file to config.yaml (gitignored) and fill in your own values.
+
+ghost:
+  # Path to your Ghost JSON export.
+  # Ghost Admin → Settings → Migration (or Labs) → Export your content.
+  export_file: ./ghost-export.json
+  # Your original Ghost site URL. Used to resolve relative asset paths, e.g.
+  # /content/images/2024/03/foo.png → https://blog.example.com/content/images/2024/03/foo.png
+  base_url: https://blog.example.com
+
+hugo:
+  # Where to write content/posts/<slug>/index.md (your Hugo site's posts dir).
+  content_dir: /path/to/your-hugo-site/content/posts
+  # Hugo permalink target — used to validate slug-URL preservation.
+  # Keep flat /:slug/ for SEO parity with Ghost.
+  permalink_pattern: /:slug/
+
+r2:
+  # Cloudflare R2 (S3-compatible object storage).
+  # Create credentials in the Cloudflare dashboard: R2 → Manage R2 API Tokens.
+  # Each value can also be supplied via R2_* environment variables.
+  endpoint_url: https://<account_id>.r2.cloudflarestorage.com
+  access_key_id: <your-access-key-id>
+  secret_access_key: <your-secret-access-key>
+  bucket: <your-bucket-name>
+  # Public CDN hostname mapped to the bucket, e.g. https://cdn.example.com
+  public_base_url: https://cdn.example.com
+  # Prefix inside the bucket for blog assets.
+  prefix: blog/
+
+assets:
+  # Download external (non-Ghost-CDN) images and re-host them on R2.
+  # Set false to leave external URLs untouched.
+  rehost_external: true
+  # Max retries per asset download.
+  max_retries: 3
+  # Per-asset HTTP timeout (seconds).
+  timeout: 30
+  # Cache-Control header set on uploaded R2 objects.
+  cache_control: "public, max-age=31536000, immutable"
+
+pipeline:
+  # Parallel worker count (posts processed concurrently).
+  workers: 8
+  # Quarantine a post on the first validator failure (don't write index.md).
+  strict: true
+  # Re-emit posts even if their index.md already exists (overwrite).
+  overwrite: false
+
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR

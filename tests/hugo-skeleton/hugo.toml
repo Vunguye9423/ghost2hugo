@@ -1,0 +1,14 @@
+baseURL = "http://localhost/"
+title = "ghost-to-hugo test"
+
+[permalinks]
+  posts = "/:slug/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.tableOfContents]
+    endLevel = 4
+    ordered = false
+    startLevel = 2
