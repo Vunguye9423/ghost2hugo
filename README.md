@@ -40,8 +40,8 @@ written vs. quarantined, plus a pass rate for every stage.
 ## Setup
 
 ```bash
-git clone https://github.com/Harsh-2002/ghost-to-hugo.git
-cd ghost-to-hugo
+git clone https://github.com/Harsh-2002/ghost2hugo.git
+cd ghost2hugo
 python3 -m venv .venv
 source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -e .
